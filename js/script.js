@@ -6,6 +6,10 @@ const reposList = document.querySelector(".repo-list");
 const reposSection = document.querySelector(".repos");
 // section: repo-data
 const repoData = document.querySelector(".repo-data");
+// back to repo gallery button
+const backToRepo = document.querySelector(".view-repos");
+// input to "search by name"
+const filterInput = document.querySelector(".filter-repos");
 
 // GitHub username
 const username = "CreatedByCC";
@@ -47,6 +51,8 @@ getRepos(username);
 
 // display repos
 const displayRepos = function(reposRes) {
+    filterInput.classList.remove("hide");
+    filterInput.focus();
         for (let repo of reposRes) {
         let repoItem = document.createElement("li");
         repoItem.classList.add("repo");
@@ -88,4 +94,25 @@ const displayRepoInfo = function(repoInfo, languages) {
     repoData.append(div);
     repoData.classList.remove("hide");
     reposSection.classList.add("hide");
+    backToRepo.classList.remove("hide");
 };
+
+backToRepo.addEventListener("click", function() {
+    reposSection.classList.remove("hide");
+    repoData.classList.add("hide");
+    backToRepo.classList.add("hide");
+});
+
+filterInput.addEventListener("input", function(e) {
+    const searchText = e.target.value;
+    const repos = document.querySelectorAll(".repo");
+    const searchLowerCase = searchText.toLowerCase();
+    for (let repo of repos) {
+        let repoLowerCase = repo.innerText.toLowerCase();
+        if (repoLowerCase.includes(searchLowerCase)) {
+            repo.classList.remove("hide");
+        } else {
+            repo.classList.add("hide");
+        }
+    }
+});
