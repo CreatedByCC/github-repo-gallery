@@ -1,20 +1,21 @@
 // overview div = show profile information
-const overview = document.querySelector(".overview");
+const profileInfo = document.querySelector(".overview");
+// ul displays repos list
+const reposList = document.querySelector(".repo-list");
 
 // GitHub username
 const username = "CreatedByCC";
 
-// Fetch API JSON Data
+// fetch profile data
 const getProfile = async function(username) {
     const info = await fetch(`https://api.github.com/users/${username}`);
     const res = await info.json();
-    console.log(res);
     displayProfile(res);
 };
 
 getProfile(username);
 
-// Display Data
+// display Data
 const displayProfile = function(res) {
     const div = document.createElement("div");
     div.classList.add("user-info");
@@ -28,5 +29,25 @@ const displayProfile = function(res) {
         <p><strong>Location:</strong> ${res.location}</p>
         <p><strong>Number of public repos:</strong> ${res.public_repos}</p>
     </div>`;
-    overview.append(div);
+    profileInfo.append(div);
+};
+
+// fetch repos data
+const getRepos = async function(username) {
+    const repoData = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+    const repoRes = await repoData.json();
+    console.log(repoRes);
+    displayRepos(repoRes);
+};
+
+getRepos(username);
+
+// display repos
+const displayRepos = function(repoRes) {
+        for (let repo of repoRes) {
+        let repoItem = document.createElement("li");
+        repoItem.classList.add("repo");
+        repoItem.innerHTML = `<h3>${repo.name}</h3>`;
+        reposList.append(repoItem);
+    }
 };
